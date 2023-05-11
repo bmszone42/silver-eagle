@@ -29,7 +29,7 @@ def calculate_range(velocity, payload_mass, fuel_mass):
     # Calculate the time and range of the rocket
     time = velocity / delta_v
     range = velocity * time
-    return range
+    return round(range)
 
 # Function to calculate the required fuel mass for a given range
 def calculate_fuel(velocity, range, payload_mass):
@@ -52,7 +52,7 @@ def calculate_fuel(velocity, range, payload_mass):
     if fuel_mass < 0:
         st.error('The specified range is not achievable with the given velocity and payload mass.')
         return
-    return fuel_mass
+    return round(fuel_mass)
 
 # Set the title of the Streamlit app
 st.title('Rocket Range Calculator')

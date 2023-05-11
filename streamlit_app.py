@@ -1,6 +1,8 @@
 # Import necessary libraries
 import streamlit as st
 import math
+import matplotlib.pyplot as plt
+import time
 
 # Constants
 # Effective exhaust velocity (m/s), typical for chemical rockets
@@ -54,6 +56,18 @@ def calculate_fuel(velocity, range, payload_mass):
         return
     return round(fuel_mass)
 
+def animate_launch(range):
+    fig = plt.figure()
+    for i in range(int(range) // 1000):
+        plt.clf()
+        plt.ylim(0, int(range) // 1000)
+        plt.gca().invert_yaxis()
+        plt.scatter(0, i)
+        plt.title('Rocket Launch')
+        plt.pause(0.01)
+    st.pyplot(fig)
+
+
 # Set the title of the Streamlit app
 st.title('Rocket Range Calculator')
 
@@ -74,6 +88,7 @@ if option == 'Range':
     range = calculate_range(velocity, payload_mass, fuel_mass)
     if range is not None:
         st.write(f'The range of the rocket is {range} meters.')
+        anumate_launch(range)
 else:
     velocity = st.number_input('Enter the velocity of the rocket (m/s)', value=2000.0)
     range = st.number_input('Enter the range (m)', value=10000.0)

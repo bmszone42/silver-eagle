@@ -1,38 +1,62 @@
-from collections import namedtuple
-import altair as alt
-import math
-import pandas as pd
 import streamlit as st
+import math
 
-"""
-# Welcome to Streamlit!
+# Constants
+EXHAUST_VELOCITY = 4500  # m/s, typical for chemical rockets
+STRUCTURE_MASS = 50000  # kg, arbitrary
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:
+def calculate_range(velocity, payload_mass, fuel_mass):
+    if velocity < 0 or payload_mass < 0 or fuel_mass < 0:
+        st.error('Input values must be non-negative.')
+        return
+    initial_mass = payload_mass + fuel_mass + STRUCTURE_MASS
+    final_mass = payload_mass + STRUCTURE_MASS
+    try:
+        delta_v = EXHAUST_VELOCITY * math.log(initial_mass / final_mass)
+    except ValueError:
+        st.error('Invalid input values.')
+        return
+    time = velocity / delta_v
+    range = velocity * time
+    return range
 
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+def calculate_fuel(velocity, range, payload_mass):
+    if velocity <= 0 or range < 0 or payload_mass < 0:
+        st.error('Input values must be non-negative and velocity must be greater than zero.')
+        return
+    time = range / velocity
+    delta_v = velocity / time
+    try:
+        initial_mass = math.exp(delta_v / EXHAUST_VELOCITY) * (payload_mass + STRUCTURE_MASS)
+    except OverflowError:
+        st.error('The required fuel mass is too large to calculate.')
+        return
+    fuel_mass = initial_mass - payload_mass - STRUCTURE_MASS
+    if fuel_mass < 0:
+        st.error('The specified range is not achievable with the given velocity and payload mass.')
+        return
+    return fuel_mass
 
-In the meantime, below is an example of what you can do with just a few lines of code:
-"""
+st.title('Rocket Range Calculator')
 
+st.write('''
+Please enter the velocity in meters per second (m/s), the payload mass and fuel mass in kilograms (kg), and the range in meters (m).
+Note that this is a simplified model and the actual range or fuel requirements of a rocket could be different due to factors not taken into account in this model, such as air resistance and gravity.
+''')
 
-with st.echo(code_location='below'):
-    total_points = st.slider("Number of points in spiral", 1, 5000, 2000)
-    num_turns = st.slider("Number of turns in spiral", 1, 100, 9)
+option = st.selectbox('What do you want to calculate?', ('Range', 'Fuel'))
 
-    Point = namedtuple('Point', 'x y')
-    data = []
-
-    points_per_turn = total_points / num_turns
-
-    for curr_point_num in range(total_points):
-        curr_turn, i = divmod(curr_point_num, points_per_turn)
-        angle = (curr_turn + 1) * 2 * math.pi * i / points_per_turn
-        radius = curr_point_num / total_points
-        x = radius * math.cos(angle)
-        y = radius * math.sin(angle)
-        data.append(Point(x, y))
-
-    st.altair_chart(alt.Chart(pd.DataFrame(data), height=500, width=500)
-        .mark_circle(color='#0068c9', opacity=0.5)
-        .encode(x='x:Q', y='y:Q'))
+if option == 'Range':
+    velocity = st.number_input('Enter the velocity of the rocket (m/s)', value=0.0)
+    payload_mass = st.number_input('Enter the payload mass (kg)', value=0.0)
+    fuel_mass = st.number_input('Enter the fuel mass (kg)', value=0.0)
+    range = calculate_range(velocity, payload_mass, fuel_mass)
+    if range is not None:
+        st.write(f'The range of the rocket is {range} meters.')
+else:
+    velocity = st.number_input('Enter the velocity of the rocket (m/s)', value=0.0)
+    range = st.number_input('Enter the range (m)', value=0.0)
+    payload_mass = st.number_input('Enter the payload mass (kg)', value=0.0)
+    fuel_mass = calculate_fuel(velocity, range, payload_mass)
+    if fuel_mass is not None:
+        st.write(f'The required fuel mass is {fuel_mass} kg.')

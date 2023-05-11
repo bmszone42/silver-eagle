@@ -14,6 +14,9 @@ def calculate_range(velocity, payload_mass, fuel_mass):
     if velocity < 0 or payload_mass < 0 or fuel_mass < 0:
         st.error('Input values must be non-negative.')
         return
+    if fuel_mass == 0:
+        st.error('Fuel mass must be greater than zero.')
+        return
     # Calculate initial and final mass of the rocket
     initial_mass = payload_mass + fuel_mass + STRUCTURE_MASS
     final_mass = payload_mass + STRUCTURE_MASS

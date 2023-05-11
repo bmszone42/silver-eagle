@@ -88,7 +88,7 @@ if option == 'Range':
     range = calculate_range(velocity, payload_mass, fuel_mass)
     if range is not None:
         st.write(f'The range of the rocket is {range} meters.')
-        anumate_launch(range)
+        animate_launch(range)
 else:
     velocity = st.number_input('Enter the velocity of the rocket (m/s)', value=2000.0)
     range = st.number_input('Enter the range (m)', value=10000.0)

@@ -68,16 +68,16 @@ option = st.selectbox('What do you want to calculate?', ('Range', 'Fuel'))
 
 # Depending on the user's choice, display the appropriate input fields and calculate the result
 if option == 'Range':
-    velocity = st.number_input('Enter the velocity of the rocket (m/s)', value=0.0)
-    payload_mass = st.number_input('Enter the payload mass (kg)', value=0.0)
-    fuel_mass = st.number_input('Enter the fuel mass (kg)', value=0.0)
+    velocity = st.number_input('Enter the velocity of the rocket (m/s)', value=2000.0)
+    payload_mass = st.number_input('Enter the payload mass (kg)', value=1000.0)
+    fuel_mass = st.number_input('Enter the fuel mass (kg)', value=10000.0)
     range = calculate_range(velocity, payload_mass, fuel_mass)
     if range is not None:
         st.write(f'The range of the rocket is {range} meters.')
 else:
-    velocity = st.number_input('Enter the velocity of the rocket (m/s)', value=0.0)
-    range = st.number_input('Enter the range (m)', value=0.0)
-    payload_mass = st.number_input('Enter the payload mass (kg)', value=0.0)
+    velocity = st.number_input('Enter the velocity of the rocket (m/s)', value=2000.0)
+    range = st.number_input('Enter the range (m)', value=10000.0)
+    payload_mass = st.number_input('Enter the payload mass (kg)', value=1000.0)
     fuel_mass = calculate_fuel(velocity, range, payload_mass)
     if fuel_mass is not None:
         st.write(f'The required fuel mass is {fuel_mass} kg.')

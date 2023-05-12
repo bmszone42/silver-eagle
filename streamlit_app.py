@@ -30,17 +30,17 @@ def calculate_range(velocity, payload_mass, fuel_mass):
         return
     # Calculate the time and range of the rocket
     time = velocity / delta_v
-    range = velocity * time
-    return round(range)
+    rocket_range = velocity * time
+    return round(rocket_range)
 
 # Function to calculate the required fuel mass for a given range
-def calculate_fuel(velocity, range, payload_mass):
+def calculate_fuel(velocity, rocket_range, payload_mass):
     # Check if input values are non-negative and velocity is greater than zero
-    if velocity <= 0 or range < 0 or payload_mass < 0:
+    if velocity <= 0 or rocket_range < 0 or payload_mass < 0:
         st.error('Input values must be non-negative and velocity must be greater than zero.')
         return
     # Calculate the time and delta_v
-    time = range / velocity
+    time = rocket_range / velocity
     delta_v = velocity / time
     # Try to calculate the initial mass of the rocket
     try:
@@ -56,11 +56,11 @@ def calculate_fuel(velocity, range, payload_mass):
         return
     return round(fuel_mass)
 
-def animate_launch(range):
+def animate_launch(rocket_range):
     fig = plt.figure()
-    for i in range(int(range) // 1000):
+    for i in range(int(rocket_range) // 1000):
         plt.clf()
-        plt.ylim(0, int(range) // 1000)
+        plt.ylim(0, int(rocket_range) // 1000)
         plt.gca().invert_yaxis()
         plt.scatter(0, i)
         plt.title('Rocket Launch')
@@ -89,7 +89,7 @@ if option == 'Range':
     if st.button('Calculate Range'):
         rocket_range = calculate_range(velocity, payload_mass, fuel_mass)
         if rocket_range is not None:
-            st.write(f'The range of the rocket is {range} meters.')
+            st.write(f'The range of the rocket is {rocket_range} meters.')
             animate_launch(rocket_range)
 else:
     velocity = st.sidebar.slider('Enter the velocity of the rocket (m/s)', min_value=0.0, max_value=10000.0, value=2000.0)
@@ -97,6 +97,6 @@ else:
     payload_mass = st.sidebar.slider('Enter the payload mass (kg)', min_value=0.0, max_value=10000.0, value=1000.0)
     
     if st.button('Calculate Fuel'):
-        fuel_mass = calculate_fuel(velocity, range, payload_mass)
+        fuel_mass = calculate_fuel(velocity, rocket_range, payload_mass)
         if fuel_mass is not None:
             st.write(f'The required fuel mass is {fuel_mass} kg.')

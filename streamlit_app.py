@@ -57,15 +57,25 @@ def calculate_fuel(velocity, rocket_range, payload_mass):
     return round(fuel_mass)
 
 def animate_launch(rocket_range):
-    fig = plt.figure()
+    # Create a placeholder for the plot
+    plot_placeholder = st.empty()
+
+    # Create a new figure for each frame in the animation
     for i in range(int(rocket_range) // 1000):
+        fig, ax = plt.subplots()
+        ax.set_ylim(0, int(rocket_range) // 1000)
+        ax.invert_yaxis()
+        ax.scatter(0, i)
+        ax.set_title('Rocket Launch')
+
+        # Display the figure in the placeholder
+        plot_placeholder.pyplot(fig)
+
+        # Clear the current figure for the next frame
         plt.clf()
-        plt.ylim(0, int(rocket_range) // 1000)
-        plt.gca().invert_yaxis()
-        plt.scatter(0, i)
-        plt.title('Rocket Launch')
-        plt.pause(0.01)
-    st.pyplot(fig)
+
+        # Optional: control the speed of the animation
+        time.sleep(0.01)
 
 
 # Set the title of the Streamlit app

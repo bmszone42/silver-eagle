@@ -82,18 +82,19 @@ option = st.selectbox('What do you want to calculate?', ('Range', 'Fuel'))
 
 # Depending on the user's choice, display the appropriate input fields and calculate the result
 if option == 'Range':
-    velocity = st.number_input('Enter the velocity of the rocket (m/s)', value=2000.0)
-    payload_mass = st.number_input('Enter the payload mass (kg)', value=1000.0)
-    fuel_mass = st.number_input('Enter the fuel mass (kg)', value=10000.0)
+    velocity = st.sidebar.slider('Enter the velocity of the rocket (m/s)', min_value=0.0, max_value=10000.0, value=2000.0)
+    payload_mass = st.sidebar.slider('Enter the payload mass (kg)', min_value=0.0, max_value=10000.0, value=1000.0)
+    fuel_mass = st.sidebar.slider('Enter the fuel mass (kg)', min_value=0.0, max_value=100000.0, value=10000.0)
     
     if st.button('Calculate Range'):
         range = calculate_range(velocity, payload_mass, fuel_mass)
         if range is not None:
             st.write(f'The range of the rocket is {range} meters.')
+            animate_launch(range)
 else:
-    velocity = st.number_input('Enter the velocity of the rocket (m/s)', value=2000.0)
-    range = st.number_input('Enter the range (m)', value=10000.0)
-    payload_mass = st.number_input('Enter the payload mass (kg)', value=1000.0)
+    velocity = st.sidebar.slider('Enter the velocity of the rocket (m/s)', min_value=0.0, max_value=10000.0, value=2000.0)
+    range = st.sidebar.slider('Enter the range (m)', min_value=0.0, max_value=100000.0, value=10000.0)
+    payload_mass = st.sidebar.slider('Enter the payload mass (kg)', min_value=0.0, max_value=10000.0, value=1000.0)
     
     if st.button('Calculate Fuel'):
         fuel_mass = calculate_fuel(velocity, range, payload_mass)

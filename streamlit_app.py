@@ -93,7 +93,7 @@ if option == 'Range':
             animate_launch(rocket_range)
 else:
     velocity = st.sidebar.slider('Enter the velocity of the rocket (m/s)', min_value=0.0, max_value=10000.0, value=2000.0)
-    range = st.sidebar.slider('Enter the range (m)', min_value=0.0, max_value=100000.0, value=10000.0)
+    rocket_range = st.sidebar.slider('Enter the range (m)', min_value=0.0, max_value=100000.0, value=10000.0)
     payload_mass = st.sidebar.slider('Enter the payload mass (kg)', min_value=0.0, max_value=10000.0, value=1000.0)
     
     if st.button('Calculate Fuel'):

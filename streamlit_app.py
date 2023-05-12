@@ -87,10 +87,10 @@ if option == 'Range':
     fuel_mass = st.sidebar.slider('Enter the fuel mass (kg)', min_value=0.0, max_value=100000.0, value=10000.0)
     
     if st.button('Calculate Range'):
-        range = calculate_range(velocity, payload_mass, fuel_mass)
-        if range is not None:
+        rocket_range = calculate_range(velocity, payload_mass, fuel_mass)
+        if rocket_range is not None:
             st.write(f'The range of the rocket is {range} meters.')
-            animate_launch(range)
+            animate_launch(rocket_range)
 else:
     velocity = st.sidebar.slider('Enter the velocity of the rocket (m/s)', min_value=0.0, max_value=10000.0, value=2000.0)
     range = st.sidebar.slider('Enter the range (m)', min_value=0.0, max_value=100000.0, value=10000.0)
